@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Result";
+}
+<div>
+    <h2>Ok, Here's your results</h2>
+</div>
+    <br /> <br />
+<div>
+    <p>If you take out a @ViewData["principal"] loan,</p>
+    <p>at @ViewData["interest"]% interest,</p>
+    <p>Your payments would be @ViewData["monthlyPayments"] per month.</p>
+    <p>You will pay a total of @ViewData["totalInterest"] in interest.</p>
+    <p>Meaning you will have paid a total of @ViewData["totalPayment"] at the end of @ViewData["years"] years.</p>
+</div>

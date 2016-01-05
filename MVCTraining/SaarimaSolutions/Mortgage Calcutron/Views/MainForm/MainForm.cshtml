@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Mortgage Calcutron";
+}
+
+    <div>
+        <h2>Welcome to the Mortgage Calcutron</h2>
+    </div>
+    <div>
+        @using (Html.BeginForm())
+        {
+            <p>How much money would you like to borrow? $@Html.TextBox("principal").  </p>
+            <p>What would the interest rate be? @Html.TextBox("interest")%.</p>
+            <p>How many years are you going to make payments? @Html.TextBox("numYears") Years.</p>
+            <input type="submit" name="submit" value="Calculate!" />
+        }
+    </div>
