@@ -1,31 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mortgage_Calcutron.Models
 {
     public class MortgageCalc
     {
-        static private double monthlyPayments { get; set; }
+        [Required]
+        [Range(0,Double.MaxValue, ErrorMessage ="Please enter a valid loan amount")]
+        private double _principal { get; set; }
+        [Required]
+        [Range(0, Double.MaxValue, ErrorMessage = "Please enter a valid interest rate")]
+        private double _interest { get; set; }
+        [Required]
+        [Range(0, Double.MaxValue, ErrorMessage = "Please enter a valid number of years")]
+        private double _numYears { get; set; }
+        private double _monthlyPayments { get; set; }
 
-        public static double calculateMonthlyPayment(double principal, double interest, double numYears)
+        public MortgageCalc(double principal, double interest, double numYears)
         {
-            double numPayments = numYears * 12;
-            double monthlyInterest = (interest * .01) / 12;
+            _principal = principal;
+            _interest = interest;
+            _numYears = numYears;
+        }
+
+        public double calculateMonthlyPayment()
+        {
+            double numPayments = _numYears * 12;
+            double monthlyInterest = (_interest * .01) / 12;
             double dividend = Math.Pow((1 + monthlyInterest), numPayments);
             double divisor = (Math.Pow((1 + monthlyInterest), numPayments) - 1);
-            monthlyPayments = principal * monthlyInterest * (dividend / divisor);
-            return monthlyPayments;
+            _monthlyPayments = _principal * monthlyInterest * (dividend / divisor);
+            return _monthlyPayments;
         }
-        public static double calculateTotalInterestPaid(double principal, double interest, double numYears)
+        public double calculateTotalInterestPaid()
         {
-            return (calculateMonthlyPayment(principal, interest, numYears) * 12 * numYears) - principal;
+            return (calculateMonthlyPayment() * 12 * _numYears) - _principal;
         }
 
-        public static double calculateTotalPayment(double principal, double interest, double numYears)
+        public double calculateTotalPayment()
         {
-            return calculateTotalInterestPaid(principal, interest, numYears) + principal;
+            return calculateTotalInterestPaid() + _principal;
         }
     }
 }

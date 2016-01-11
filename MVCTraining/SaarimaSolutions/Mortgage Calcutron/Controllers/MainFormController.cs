@@ -22,12 +22,16 @@ namespace Mortgage_Calcutron.Controllers
             ViewData["interest"] = interest;
             ViewData["principal"] = string.Format("{0:C}", principal);
             ViewData["years"] = numYears;
-            double monthlyPayments = MortgageCalc.calculateMonthlyPayment(principal, interest, numYears);
+            MortgageCalc mort = new MortgageCalc(principal, interest, numYears);
+            double monthlyPayments = mort.calculateMonthlyPayment();
             ViewData["monthlyPayments"] = string.Format("{0:C}", monthlyPayments);
-            double totalInterest = MortgageCalc.calculateTotalInterestPaid(principal,interest, numYears);
+            double totalInterest = mort.calculateTotalInterestPaid();
             ViewData["totalInterest"] = string.Format("{0:C}", totalInterest);
-            double totalPayment = MortgageCalc.calculateTotalPayment(principal, interest, numYears);
+            double totalPayment = mort.calculateTotalPayment();
             ViewData["totalPayment"] = string.Format("{0:C}", totalPayment);
+
+
+
             return View("Result");
         }
     }
