@@ -5,41 +5,63 @@ namespace Mortgage_Calcutron.Models
 {
     public class MortgageCalc
     {
+
         [Required]
         [Range(0,Double.MaxValue, ErrorMessage ="Please enter a valid loan amount")]
-        private double _principal { get; set; }
+        public double Principal { get; set; }
         [Required]
         [Range(0, Double.MaxValue, ErrorMessage = "Please enter a valid interest rate")]
-        private double _interest { get; set; }
+        public double Interest { get; set; }
         [Required]
         [Range(0, Double.MaxValue, ErrorMessage = "Please enter a valid number of years")]
-        private double _numYears { get; set; }
-        private double _monthlyPayments { get; set; }
+        public double NumYears { get; set; }
+        public double NumPayments { get; set; }
+        public double MonthlyInterest { get; set; }
+        public double MonthlyPayments { get; set; }
+        public double TotalInterestPaid { get; set; }
+        public double TotalPayment { get; set; }
+
+        public MortgageCalc()
+        {
+
+        }
 
         public MortgageCalc(double principal, double interest, double numYears)
         {
-            _principal = principal;
-            _interest = interest;
-            _numYears = numYears;
+            Principal = principal;
+            Interest = interest;
+            NumYears = numYears;
+            calculateNumPayments();
+            calculateMonthlyInterest();
+            calculateMonthlyPayment();
+            calculateTotalInterestPaid();
+            calculateTotalPayment();
         }
 
-        public double calculateMonthlyPayment()
+        public void calculateNumPayments()
         {
-            double numPayments = _numYears * 12;
-            double monthlyInterest = (_interest * .01) / 12;
-            double dividend = Math.Pow((1 + monthlyInterest), numPayments);
-            double divisor = (Math.Pow((1 + monthlyInterest), numPayments) - 1);
-            _monthlyPayments = _principal * monthlyInterest * (dividend / divisor);
-            return _monthlyPayments;
-        }
-        public double calculateTotalInterestPaid()
-        {
-            return (calculateMonthlyPayment() * 12 * _numYears) - _principal;
+            NumPayments = NumYears * 12;
         }
 
-        public double calculateTotalPayment()
+        public void calculateMonthlyInterest()
         {
-            return calculateTotalInterestPaid() + _principal;
+            MonthlyInterest = (Interest * .01) / 12;
+        }
+
+        public void calculateMonthlyPayment()
+        {
+            double dividend = Math.Pow((1 + MonthlyInterest), NumPayments);
+            double divisor = (Math.Pow((1 + MonthlyInterest), NumPayments) - 1);
+            MonthlyPayments = Principal * MonthlyInterest * (dividend / divisor);
+        }
+        public void calculateTotalInterestPaid()
+        {
+            TotalInterestPaid = (MonthlyPayments * 12 * NumYears) - Principal;
+        }
+
+        public void calculateTotalPayment()
+        {
+            TotalPayment = TotalInterestPaid + Principal;
         }
     }
 }

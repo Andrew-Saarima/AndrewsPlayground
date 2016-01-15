@@ -17,22 +17,18 @@ namespace Mortgage_Calcutron.Controllers
         }
 
         [HttpPost]
-        public ActionResult MainForm(double principal, double interest, double numYears)
+        public ActionResult MainForm(MortgageCalc model)
         {
-            ViewData["interest"] = interest;
-            ViewData["principal"] = string.Format("{0:C}", principal);
-            ViewData["years"] = numYears;
-            MortgageCalc mort = new MortgageCalc(principal, interest, numYears);
-            double monthlyPayments = mort.calculateMonthlyPayment();
-            ViewData["monthlyPayments"] = string.Format("{0:C}", monthlyPayments);
-            double totalInterest = mort.calculateTotalInterestPaid();
-            ViewData["totalInterest"] = string.Format("{0:C}", totalInterest);
-            double totalPayment = mort.calculateTotalPayment();
-            ViewData["totalPayment"] = string.Format("{0:C}", totalPayment);
-
-
-
-            return View("Result");
+            if (ModelState.IsValid)
+            {
+                MortgageCalc mort = new MortgageCalc(model.Principal, model.Interest, model.NumYears);
+                CalcModelView mortView = new CalcModelView(mort);
+                return View("Result",mortView);
+            }
+            else
+            {
+                return View(model);
+            }
         }
     }
 }
